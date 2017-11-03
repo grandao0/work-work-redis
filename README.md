@@ -1,7 +1,7 @@
 work-work-redis
 ==============
 
-Seeing is believing.
+The future is ours.
 
 
 #### Redis
