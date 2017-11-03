@@ -23,9 +23,13 @@ SET-if-not-exists (called **SETNX** on Redis) that sets a key only if it does no
 **INCR** to atomically increment a number stored at a given key.
 
 `SET connections 10`
+
 `INCR connections` => 11
+
 `INCR connections` => 12
+
 `DEL connections`
+
 `INCR connections` => 1
 
 There is something special about **INCR**. Calling the **INCR** command in Redis is an atomic operation.
@@ -33,10 +37,13 @@ There is something special about **INCR**. Calling the **INCR** command in Redis
 Redis can be told that a key should only exist for a certain length of time. This is accomplished with the **EXPIRE** and **TTL** commands.
 
 `SET resource:lock "Redis Demo"`
+
 `EXPIRE resource:lock 120`
 
 `TTL resource:lock` => 113
+
 // after 113s
+
 `TTL resource:lock` => -2
 
 The -2 for the **TTL** of the key means that the key does not exist (anymore). 
@@ -44,9 +51,13 @@ The -2 for the **TTL** of the key means that the key does not exist (anymore).
 A -1 for the **TTL** of the key means that it will never expire. Note that if you **SET** a key, its **TTL** will be reset.
 
 `SET resource:lock "Redis Demo 1"`
+
 `EXPIRE resource:lock 120`
+
 `TTL resource:lock` => 119
+
 `SET resource:lock "Redis Demo 2"`
+
 `TTL resource:lock` => -1
 
 Redis also supports several more complex data structures. The first one we'll look at is a *list*. A list is a series of ordered values. 
@@ -56,6 +67,7 @@ Some of the important commands for interacting with lists are **RPUSH**, **LPUSH
 **RPUSH** puts the new value at the end of the list.
 
 `RPUSH friends "Alice"`
+
 `RPUSH friends "Bob"`
 
 **LPUSH** puts the new value at the start of the list.
@@ -68,7 +80,9 @@ A value of -1 for the second parameter means to retrieve elements until the end 
 
 
 `LRANGE friends 0 -1` => 1) "Sam", 2) "Alice", 3) "Bob"
+
 `LRANGE friends 0 1` => 1) "Sam", 2) "Alice"
+
 `LRANGE friends 1 2` => 1) "Alice", 2) "Bob"
 
 **LLEN** returns the current length of the list.
@@ -97,7 +111,9 @@ Some of the important commands in working with sets are **SADD**, **SREM**, **SI
 **SADD** adds the given value to the set.
 
 `SADD superpowers "flight"`
+
 `SADD superpowers "x-ray vision"`
+
 `SADD superpowers "reflexes"`
 
 **SREM** removes the given value from the set.
@@ -107,6 +123,7 @@ Some of the important commands in working with sets are **SADD**, **SREM**, **SI
 **SISMEMBER** tests if the given value is in the set. It returns 1 if the value is there and 0 if it is not.
 
 `SISMEMBER superpowers "flight"` => 1
+
 `SISMEMBER superpowers "reflexes"` => 0
 
 **SMEMBERS** returns a list of all the members of this set.
@@ -116,7 +133,9 @@ Some of the important commands in working with sets are **SADD**, **SREM**, **SI
 **SUNION** combines two or more sets and returns the list of all elements.
 
 `SADD birdpowers "pecking"`
+
 `SADD birdpowers "flight"`
+
 `SUNION superpowers birdpowers` => 1) "pecking", 2) "x-ray vision", 3) "flight"
 
 Sets are a very handy data type, but as they are unsorted they don't work well for a number of problems. This is why Redis 1.2 introduced *Sorted Sets*.
@@ -124,12 +143,19 @@ Sets are a very handy data type, but as they are unsorted they don't work well f
 A sorted set is similar to a regular set, but now each value has an associated score. This score is used to sort the elements in the set.
 
 `ZADD hackers 1940 "Alan Kay"`
+
 `ZADD hackers 1906 "Grace Hopper"`
+
 `ZADD hackers 1953 "Richard Stallman"`
+
 `ZADD hackers 1965 "Yukihiro Matsumoto"`
+
 `ZADD hackers 1916 "Claude Shannon"`
+
 `ZADD hackers 1969 "Linus Torvalds"`
+
 `ZADD hackers 1957 "Sophie Wilson"`
+
 `ZADD hackers 1912 "Alan Turing"`
 
 In these examples, the scores are years of birth and the values are the names of famous hackers.
@@ -141,7 +167,9 @@ Simple strings, sets and sorted sets already get a lot done but there is one mor
 Hashes are maps between string fields and string values, so they are the perfect data type to represent objects (eg: A User with a number of fields like name, surname, age, and so forth):
 
 `HSET user:1000 name "John Smith"`
+
 `HSET user:1000 email "john.smith@example.com"`
+
 `HSET user:1000 password "s3cret"`
 
 To get back the saved data use **HGETALL**:
@@ -159,9 +187,13 @@ If you only need a single field value that is possible as well with **HGET**:
 Numerical values in hash fields are handled exactly the same as in simple strings and there are operations to increment this value in an atomic way.
 
 `HSET user:1000 visits 10`
+
 `HINCRBY user:1000 visits 1` => 11
+
 `HINCRBY user:1000 visits 10` => 21
+
 `HDEL user:1000 visits`
+
 `HINCRBY user:1000 visits 1` => 1
 
-Check the [full list of Hash commands] (https://redis.io/commands#hash) for more information.
+Check the [full list of Hash commands] (https://redis.io/commands) for more information.
